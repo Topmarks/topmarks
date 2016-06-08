@@ -1,0 +1,26 @@
+{
+  "name": "telemetry",
+  "version": "0.1.0",
+  "description": "CSS Benchmarking command line tool using Chromium's Telemetry",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topcoat/Telemetry.git"
+  },
+  "keywords": [
+    "css",
+    "performance",
+    "telemetry",
+    "testing",
+    "cli"
+  ],
+  "author": "Garth Braithwaite <garthdb@gmail.com> (http://garthdb.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/topcoat/Telemetry/issues"
+  },
+  "homepage": "https://github.com/topcoat/Telemetry#readme"
+}
