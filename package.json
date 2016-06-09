@@ -1,10 +1,16 @@
 {
-  "name": "telemetry",
+  "name": "toplemetry",
   "version": "0.1.0",
   "description": "CSS Benchmarking command line tool using Chromium's Telemetry",
-  "main": "index.js",
+  "main": "./lib/toplemetry",
+  "bin": {
+    "topl": "./bin/toplemetry.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "babel --presets es2015 -d lib/ src/",
+    "prepublish": "npm run compile",
+    "test": "mocha test",
+    "help": "topl --help"
   },
   "repository": {
     "type": "git",
@@ -22,5 +28,14 @@
   "bugs": {
     "url": "https://github.com/topcoat/Telemetry/issues"
   },
-  "homepage": "https://github.com/topcoat/Telemetry#readme"
+  "homepage": "https://github.com/topcoat/Telemetry#readme",
+  "dependencies": {
+    "commander": "^2.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "mocha": "^2.5.3",
+    "nixt": "^0.5.0"
+  }
 }
