@@ -1,12 +1,12 @@
-var nixt = require('nixt');
+import nixt from 'nixt';
 
-describe('basic output', function() {
-  it('displays output', function(done) {
+describe('Toplemetry CLI', () => {
+  it('displays output', done => {
     nixt()
     .run('topl --help')
     .end(done);
   });
-  it('displays current version', function(done) {
+  it('displays current version', done => {
     nixt()
     .run('topl -V')
     .stdout(require('../package.json').version)
