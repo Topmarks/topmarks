@@ -4,12 +4,20 @@ import Toplemetry from "../lib/toplemetry";
 chai.should();
 
 describe('Toplemetry', () => {
-  let chromiumSrc = '/new/path/to/chromiumsrc';
-  let toplemetry;
-  beforeEach(() => {
-    toplemetry = new Toplemetry(chromiumSrc);
-  });
+  let invalidChromiumSrc = '/new/path/to/chromium/';
+  let validChromiumSrc = '/new/path/to/chromium/src/';
   it('sets properties in constructor', () => {
-    toplemetry.chromiumSrc.should.equal(chromiumSrc);
+    let toplemetry = new Toplemetry(validChromiumSrc);
+    toplemetry.chromiumSrc.should.equal(validChromiumSrc);
+  });
+  it('throws error for invalid chromiumSrc path', () => {
+    let valid = true;
+    try {
+      new Toplemetry(invalidChromiumSrc);
+    }
+    catch(e){
+      valid = false;
+    }
+    valid.should.be.false;
   });
 });
