@@ -61,7 +61,7 @@ export default class Toplemetry {
   scrolling(callback){
     this.chromeSetup(()=>{
       console.log('hello');
-      Tracing.start({
+      this.chrome.Tracing.start({
         "categories": TRACE_CATEGORIES.join(','),
         "options": "sampling-frequency=10000"
       });

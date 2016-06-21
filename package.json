@@ -7,13 +7,14 @@
     "topl": "./bin/toplemetry.js"
   },
   "scripts": {
-    "compile": "babel --presets [es2015,stage-0] -d lib/ src/",
-    "compile-watch": "babel --watch --presets es2015,stage-0 -d lib/ src/",
+    "compile": "babel --presets es2015 -d lib/ src/",
+    "compile-watch": "babel --watch --presets es2015 -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "npm run compile",
     "test": "mocha --compilers js:babel-core/register test",
     "test-watch": "npm run compile-watch & multi=\"mocha-osx-reporter=- nyan=-\" mocha --compilers js:babel-core/register --watch --reporter mocha-multi test/",
-    "help": "topl --help"
+    "help": "topl --help",
+    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi"
   },
   "repository": {
     "type": "git",
