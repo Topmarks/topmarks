@@ -7,12 +7,12 @@
     "topl": "./bin/toplemetry.js"
   },
   "scripts": {
-    "compile": "babel --presets es2015 -d lib/ src/",
-    "compile-watch": "babel --watch --presets es2015 -d lib/ src/",
+    "compile": "babel --presets [es2015,stage-0] -d lib/ src/",
+    "compile-watch": "babel --watch --presets es2015,stage-0 -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "npm run compile",
     "test": "mocha --compilers js:babel-core/register test",
-    "test-watch": "npm run compile-watch & mocha --compilers js:babel-core/register --watch --reporter mocha-osx-reporter test/",
+    "test-watch": "npm run compile-watch & multi=\"mocha-osx-reporter=- nyan=-\" mocha --compilers js:babel-core/register --watch --reporter mocha-multi test/",
     "help": "topl --help"
   },
   "repository": {
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/topcoat/Telemetry#readme",
   "dependencies": {
+    "chrome-remote-interface": "^0.12.2",
     "commander": "^2.9.0"
   },
   "devDependencies": {
@@ -41,6 +42,7 @@
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
+    "mocha-multi": "^0.9.0",
     "mocha-osx-reporter": "^0.1.2",
     "nixt": "^0.5.0"
   }

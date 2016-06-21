@@ -3,15 +3,19 @@ var path = require('path');
 var fs = require('fs');
 var program = require('commander');
 var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
-var Toplemetry = require(lib + '/toplemetry');
+var tempToplemetry = require('../lib/toplemetry');
+var Toplemetry = _interopRequireDefault(tempToplemetry);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 program
   .version(require('../package.json').version)
-  .option('-c, --chromium-src', 'The Path to telemetry src file')
-  .option('-b, --assemble-build', 'Builds the tests, if the testing directory is not present topl will assume it needs to be built')
+  .option('-c, --chrome-path [path]', 'The path to google-chrome.')
+  .option('-p, --port [port]', 'The debugging port for google-chrome')
+  .option('-u, --url [url]', 'The url to test')
   .parse(process.argv);
 
 console.log('Starting Toplemetry');
-var chromiumSrc = program.chromiumSrc;
-var assembleBuild = (program.assembleBuild)? true : false;
-console.log(assembleBuild);
+var topl = new Toplemetry.default(program.port, program.url);
+topl.runAll(function(){
+  console.log("Page ("+ topl.url +") LoadTime: "+topl.loadtime);
+});
