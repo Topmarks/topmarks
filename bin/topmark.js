@@ -15,7 +15,19 @@ program
   .parse(process.argv);
 
 console.log('Starting Topmark');
-var topl = new Topmark.default(program.port, program.url);
-topl.runAll(function(){
-  console.log("Page ("+ topl.url +") LoadTime: "+topl.loadtime);
+var topm = new Topmark.default(program.port, program.url);
+topm.loading().then(function(loadTime) {
+  console.log("Page ["+ topm.url +"] loaded in "+loadTime+"ms");
+  topm.scrolling().then(function(frames) {
+    console.log(`Total Frame Count ${frames.getTotalFrameCount()}`);
+    console.log(`Average Frame Rate ${frames.getAverageFrameRate()} fps`);
+    console.log(`Total Large Frame Count ${frames.getTotalLargeFrameCount()}`);
+    console.log('Frame time breakdown');
+    console.log(frames.getBreakDownPercentage());
+    topm.close().then(function() {
+      console.log('Topmark Complete');
+    });
+  });
+}).catch(function(error) {
+  console.error(error);
 });
