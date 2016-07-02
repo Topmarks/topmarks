@@ -4,7 +4,7 @@ import FramesUtil from './frames-util';
 
 let TRACE_CATEGORIES = ["-*", "devtools.timeline", "disabled-by-default-devtools.timeline", "disabled-by-default-devtools.timeline.frame", "toplevel", "blink.console", "disabled-by-default-devtools.timeline.stack", "disabled-by-default-devtools.screenshot", "disabled-by-default-v8.cpu_profile"];
 
-export default class Toplemetry {
+class Topmark {
   constructor(port, url){
     this.port = (typeof port !== 'undefined')?  port : 9222;
     this.url = (typeof url !== 'undefined')?  url : 'http://topcoat.io';
@@ -20,13 +20,13 @@ export default class Toplemetry {
     }
   }
   chromeOpenConnection(callback){
-    Chrome.New({},(err, tab)=>{
+    Chrome.New({port: this.port},(err, tab)=>{
       this.tab = tab;
-      Chrome(chrome => {
+      Chrome({port: this.port}, (chrome) => {
         this.chrome = chrome;
         callback();
       }).on('error', () => {
-        console.error('Cannot connect to Chrome');
+        throw Error(`Cannot connect to Chrome on port ${this.port}`);
       });
     });
   }
@@ -100,3 +100,5 @@ export default class Toplemetry {
     });
   }
 }
+
+export default Topmark;

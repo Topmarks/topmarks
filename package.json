@@ -1,10 +1,10 @@
 {
-  "name": "toplemetry",
+  "name": "topmarks",
   "version": "0.1.0",
-  "description": "CSS Benchmarking command line tool using Chromium's Telemetry",
-  "main": "./lib/toplemetry",
+  "description": "CSS Benchmarking command line tool using Chrome's remote debugging protocol",
+  "main": "./lib/topmark",
   "bin": {
-    "topl": "./bin/toplemetry.js"
+    "topm": "./bin/topmark.js"
   },
   "scripts": {
     "compile": "babel --presets es2015 -d lib/ src/",
@@ -13,26 +13,38 @@
     "pretest": "npm run compile",
     "test": "mocha --compilers js:babel-core/register test",
     "test-watch": "npm run compile-watch & multi=\"mocha-osx-reporter=- nyan=-\" mocha --compilers js:babel-core/register --watch --reporter mocha-multi test/",
+    "coverage": "nyc npm test",
     "help": "topl --help",
-    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size=\"800,600\""
+    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9223 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size=\"800,600\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/topcoat/Telemetry.git"
+    "url": "git+https://github.com/topcoat/topmarks.git"
   },
   "keywords": [
     "css",
     "performance",
     "telemetry",
     "testing",
-    "cli"
+    "cli",
+    "remote debugger protocol"
   ],
   "author": "Garth Braithwaite <garthdb@gmail.com> (http://garthdb.com)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/topcoat/Telemetry/issues"
+    "url": "https://github.com/topcoat/topmarks/issues"
   },
-  "homepage": "https://github.com/topcoat/Telemetry#readme",
+  "homepage": "https://github.com/topcoat/topmarks#readme",
+  "nyc": {
+    "include": [
+      "lib/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
   "dependencies": {
     "chrome-remote-interface": "^0.12.2",
     "commander": "^2.9.0"
@@ -40,12 +52,14 @@
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.1",
+    "babel-plugin-__coverage__": "^11.0.0",
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
     "devtools-timeline-model": "^1.1.6",
     "mocha": "^2.5.3",
     "mocha-multi": "^0.9.0",
     "mocha-osx-reporter": "^0.1.2",
-    "nixt": "^0.5.0"
+    "nixt": "^0.5.0",
+    "nyc": "^6.6.1"
   }
 }
