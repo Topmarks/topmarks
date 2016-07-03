@@ -89,7 +89,6 @@ export default class Topmark {
           this.chrome.Tracing.dataCollected(function(data){
             var events = data.value;
             rawEvents = rawEvents.concat(events);
-
           });
 
           this.chrome.Tracing.start({
