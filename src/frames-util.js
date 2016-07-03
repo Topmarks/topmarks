@@ -8,7 +8,14 @@ export default class FramesUtil {
       repaints: 0,
       largeFrames: [],
       totalDuration: 0,
-      timeByCategory: {idle: 0},
+      timeByCategory: {
+        idle: 0,
+        other: 0,
+        painting: 0,
+        rendering: 0,
+        scripting: 0,
+        loading: 0
+      },
     };
     frames.forEach((frame, index) => {
       if(frame.duration > 18){
@@ -20,11 +27,7 @@ export default class FramesUtil {
       let categoryTotal = 0;
 
       for (let category in frame.timeByCategory) {
-        if(!result.timeByCategory.hasOwnProperty(category)){
-          result.timeByCategory[category] = frame.timeByCategory[category];
-        } else {
-          result.timeByCategory[category] += frame.timeByCategory[category];
-        }
+        result.timeByCategory[category] += frame.timeByCategory[category];
         categoryTotal += frame.timeByCategory[category];
       }
       result.timeByCategory.idle += frame.duration - categoryTotal;
