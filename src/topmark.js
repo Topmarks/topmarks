@@ -22,7 +22,7 @@ export default class Topmark {
           connected = false;
         }
       }
-
+      console.log(`connected? ${connected}`);
       if (!connected) {
 
         Chrome({port: this.port}, (chrome) => {
@@ -38,13 +38,15 @@ export default class Topmark {
     });
   }
 
-  openTab() {
+  openTab(url = "about:blank") {
     return new Promise((resolve, reject) => {
       if(!this.tab){
         this.chromeOpenConnection().then(() => {
-          Chrome.New({port: this.port},(err, tab) => {
-            this.tab = tab;
-            resolve(tab);
+          Chrome.New({port: this.port, url: url},(err, tab) => {
+            Chrome.Activate({port: this.port, id:tab.id}).then((err) => {
+              this.tab = tab;
+              resolve(tab);
+            });
           }).on('error', () => {
             reject(Error(`Could not open tab`));
           });
@@ -60,9 +62,10 @@ export default class Topmark {
       if(this.tab){
         this.chromeOpenConnection()
           .then(Chrome.Close({port: this.port, id: this.tab.id}))
+          .then(this.closeConnection())
           .then(() => {
             delete this.tab;
-            resolve(true)
+            resolve(true);
           });
       } else {
         resolve('Tab already closed');
@@ -74,18 +77,32 @@ export default class Topmark {
     return new Promise((resolve, reject) => {
       this.chrome.ws.onclose = function(event){
         event.target.removeAllListeners();
+        delete this.chrome;
         resolve(event);
       }
       this.chrome.ws.close();
     });
   }
-
+  getScrollHeight() {
+    return new Promise((resolve, reject) => {
+      this.chromeOpenConnection().then((port) => {
+        this.chrome.Runtime.evaluate({expression: "document.body.clientHeight - window.innerHeight"}, (err, params)=> {
+          if(err) {
+            reject(Error('Could not determine page height'));
+          } else if (params.result.value <= 0) {
+            reject(Error('The page is too small to scroll'));
+          } else {
+            resolve(-parseInt(params.result.value));
+          }
+        });
+      });
+    });
+  }
   loading() {
     return new Promise((resolve, reject) => {
       let requestStartTime,
           requestEndTime;
       this.openTab().then(() => {
-        console.log(this.chrome);
         this.chrome.Network.enable();
         this.chrome.Page.enable();
         this.chrome.Network.requestWillBeSent(params => {
@@ -94,47 +111,63 @@ export default class Topmark {
         this.chrome.Page.loadEventFired( params => {
           requestEndTime = params.timestamp;
           this.loadtime = parseFloat(requestEndTime) - parseFloat(requestStartTime);
-          this.chrome.Runtime.evaluate({expression: "document.body.clientHeight - window.innerHeight"}, (err, params)=>{
-            if(!err){
-              this.scrollHeight = -parseInt(params.result.value);
-            } else {
-              reject(Error('Could not determine page height'));
-            }
+          this.closeTab().then(() => {
             resolve(this.loadtime);
           });
         });
-        this.chrome.once('ready', () => {
-          this.chrome.Page.navigate({url: this.url});
+        Chrome.Activate({port: this.port, id:this.tab.id}).then((err, params)=>{
+          console.log(params);
+          this.chrome.once('ready', () => {
+            this.chrome.Page.navigate({url: this.url});
+          });
         });
       }).catch((error)=>{reject(error)});
     });
   }
-  scrolling(callback){
+  scrolling(){
     return new Promise((resolve, reject) => {
       if(this.scrollHeight >= 0){
         reject(Error(`[${this.url}]'s scrollable area is ${this.scrollHeight}`));
       } else {
-        this.openTab().then(() => {
+        this.openTab(this.url).then((result) => {
+          this.getScrollHeight().then((scrollHeight) => {
+            console.log(`the scrollHeight ${scrollHeight}`);
+            this.scrollHeight = scrollHeight;
 
-          let rawEvents = [];
+            let rawEvents = [];
 
-          this.chrome.Tracing.dataCollected(function(data){
-            var events = data.value;
-            rawEvents = rawEvents.concat(events);
-          });
+            this.chrome.Tracing.dataCollected(function(data){
+              let events = data.value;
+              rawEvents = rawEvents.concat(events);
+            });
 
-          this.chrome.Tracing.start({
-            "categories": TRACE_CATEGORIES.join(','),
-            "options": "sampling-frequency=10000"
-          });
-          this.chrome.Input.synthesizeScrollGesture({x: 0, y: 0, xDistance: 0, yDistance: this.scrollHeight, gestureSourceType: 'mouse', speed: 1600},(err,params) => {
-            this.chrome.Tracing.end();
-          });
+            this.chrome.Tracing.tracingComplete(() => {
+              console.log('complete');
+              let model = new DevtoolsTimelineModel(rawEvents);
+              let frames = new FramesUtil(model.frameModel()._frames);
+              this.closeTab().then(() => {
+                resolve(frames);
+              });
+            });
 
-          this.chrome.Tracing.tracingComplete(() => {
-            let model = new DevtoolsTimelineModel(rawEvents);
-            let frames = new FramesUtil(model.frameModel()._frames);
-            resolve(frames);
+            this.chrome.Tracing.start({
+              "categories": TRACE_CATEGORIES.join(','),
+              "options": "sampling-frequency=10000"
+            }).then((err, params)=>{
+              console.log(this.scrollHeight);
+              this.chrome.send('Input.synthesizeScrollGesture', {x: 0, y: 0, xDistance: 0, yDistance: this.scrollHeight, repeatCount: 2}).then((params)=>{
+                console.log(params);
+                this.closeTab().then(() => {
+                  resolve(frames);
+                });
+              }).catch((err) => {
+                console.log(err);
+              });
+              // this.chrome.Input.synthesizeScrollGesture(,(err,params) => {
+              //   console.log(err);
+              //   // this.chrome.Tracing.end();
+              // });
+            });
           });
 
         }).catch((error)=>{reject(error)});

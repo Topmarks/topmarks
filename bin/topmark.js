@@ -19,18 +19,18 @@ console.log('Starting Topmark');
 var topm = new Topmark.default(program.port, program.url);
 topm.loading().then(function(loadTime) {
   console.log("Page ["+ topm.url +"] loaded in "+loadTime+"ms");
-  topm.scrolling().then(function(frames) {
-    console.log(`Total Frame Count ${frames.getTotalFrameCount()}`);
-    console.log(`Average Frame Rate ${frames.getAverageFrameRate()} fps`);
-    console.log(`Total Large Frame Count ${frames.getTotalLargeFrameCount()}`);
-    console.log('Frame time breakdown');
-    console.log(frames.getBreakDownPercentage());
-    topm.closeTab().then(function() {
-      topm.closeConnection().then(function(){
-        console.log('Topmark Complete');
-      });
-    });
-  });
+  // topm.scrolling().then(function(frames) {
+  //   console.log(`Total Frame Count ${frames.getTotalFrameCount()}`);
+  //   console.log(`Average Frame Rate ${frames.getAverageFrameRate()} fps`);
+  //   console.log(`Total Large Frame Count ${frames.getTotalLargeFrameCount()}`);
+  //   console.log('Frame time breakdown');
+  //   console.log(frames.getBreakDownPercentage());
+  //   topm.closeTab().then(function() {
+  //     topm.closeConnection().then(function(){
+  //       console.log('Topmark Complete');
+  //     });
+  //   });
+  // });
 }).catch(function(error) {
   console.error(error);
 });

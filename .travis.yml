@@ -1,0 +1,17 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - "6.2.2"
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+before_script:
+  - sudo apt-get update -qq
+  - google-chrome --version
+  - xvfb-run --server-args='-screen 0, 1024x768x16' google-chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size='800,600' > /dev/null &
+  - npm link
+after_success: npm run coverage

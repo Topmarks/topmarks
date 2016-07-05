@@ -13,9 +13,9 @@
     "pretest": "npm run compile",
     "test": "mocha --compilers js:babel-core/register test",
     "test-watch": "npm run compile-watch & multi=\"mocha-osx-reporter=- nyan=-\" mocha --compilers js:babel-core/register --watch --reporter mocha-multi test/",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc --require babel-core/register npm test && nyc report --reporter=text-lcov | coveralls",
     "help": "topl --help",
-    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size=\"800,600\""
+    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size=\"800,600\" --enable-gpu-benchmarking"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,9 @@
     "chai-as-promised": "^5.3.0",
     "coveralls": "^2.11.9",
     "devtools-timeline-model": "^1.1.6",
+    "karma": "^1.1.0",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^1.1.1",
     "mocha": "^2.5.3",
     "mocha-multi": "^0.9.0",
     "mocha-osx-reporter": "^0.1.2",
