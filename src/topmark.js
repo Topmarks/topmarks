@@ -25,14 +25,11 @@ export default class Topmark {
 
       if (!connected) {
 
-        Chrome.New({port: this.port},(err, tab) => {
-          this.tab = tab;
-          Chrome({port: this.port}, (chrome) => {
-            this.chrome = chrome;
-            resolve(this.port);
-          }).on('error', () => {
-            reject(Error(`Cannot connect to Chrome on port ${this.port}`));
-          });
+        Chrome({port: this.port}, (chrome) => {
+          this.chrome = chrome;
+          resolve(this.port);
+        }).on('error', () => {
+          reject(Error(`Cannot connect to Chrome on port ${this.port}`));
         });
 
       } else {
@@ -41,11 +38,45 @@ export default class Topmark {
     });
   }
 
-  close() {
+  openTab() {
     return new Promise((resolve, reject) => {
-      this.chromeOpenConnection()
-        .then(Chrome.Close({port: this.port, id: this.tab.id}))
-        .then(this.chrome.close());
+      if(!this.tab){
+        this.chromeOpenConnection().then(() => {
+          Chrome.New({port: this.port},(err, tab) => {
+            this.tab = tab;
+            resolve(tab);
+          }).on('error', () => {
+            reject(Error(`Could not open tab`));
+          });
+        });
+      } else {
+        resolve(this.tab);
+      }
+    });
+  }
+
+  closeTab() {
+    return new Promise((resolve, reject) => {
+      if(this.tab){
+        this.chromeOpenConnection()
+          .then(Chrome.Close({port: this.port, id: this.tab.id}))
+          .then(() => {
+            delete this.tab;
+            resolve(true)
+          });
+      } else {
+        resolve('Tab already closed');
+      }
+    });
+  }
+
+  closeConnection(){
+    return new Promise((resolve, reject) => {
+      this.chrome.ws.onclose = function(event){
+        event.target.removeAllListeners();
+        resolve(event);
+      }
+      this.chrome.ws.close();
     });
   }
 
@@ -53,7 +84,8 @@ export default class Topmark {
     return new Promise((resolve, reject) => {
       let requestStartTime,
           requestEndTime;
-      this.chromeOpenConnection().then(() => {
+      this.openTab().then(() => {
+        console.log(this.chrome);
         this.chrome.Network.enable();
         this.chrome.Page.enable();
         this.chrome.Network.requestWillBeSent(params => {
@@ -82,7 +114,7 @@ export default class Topmark {
       if(this.scrollHeight >= 0){
         reject(Error(`[${this.url}]'s scrollable area is ${this.scrollHeight}`));
       } else {
-        this.chromeOpenConnection().then(() => {
+        this.openTab().then(() => {
 
           let rawEvents = [];
 

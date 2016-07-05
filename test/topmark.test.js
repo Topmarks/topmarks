@@ -19,35 +19,48 @@ describe('Topmark', () => {
   });
 
   describe('connection', () => {
+    let topmark;
+    afterEach((done) => {
+      topmark.closeTab().then(topmark.closeConnection().then(done()));
+    });
     it('should fail if Chrome is using the wrong port', (done) => {
       let badPort = 9226
-      let topmark = new Topmark(badPort, url);
+      topmark = new Topmark(badPort, url);
       topmark.chromeOpenConnection().should.be.rejectedWith(`Error: Cannot connect to Chrome on port ${badPort}`).notify(done);
     })
     it('should connect to Chrome with the correct port', function(done) {
-      this.timeout(10000);
-      let topmark = new Topmark(port, url);
+      topmark = new Topmark(port, url);
       topmark.chromeOpenConnection().should.eventually.equal(port).notify(done);
+    });
+    it('should open a new tab in chrome', function(done) {
+      topmark = new Topmark(port, url);
+      topmark.openTab((result) => {
+        console.log(result.toString());
+        done()
+      });
     });
   });
 
   describe('tests', function() {
-    before(()=>{
-      this.topmark = new Topmark(9222, "http://topcoat.io");
+    let topmark;
+    beforeEach(()=>{
+      topmark = new Topmark(9222, "http://topcoat.io");
     });
     afterEach((done)=>{
-      this.topmark.close().then(done());
+      topmark.closeTab().then(topmark.closeConnection().then(done()));
     });
-    this.timeout(10000);
+    it('should return scroll performance analysis', function(done) {
+      this.timeout(20000);
+      topmark.loading().then((result) => {
+        topmark.scrolling().then((result) => {
+          done();
+        });
+      });
+    });
     it('should return page load time (in ms)', (done) => {
-      this.topmark.loading().should.eventually.be.a('number').notify(done);
-    });
-    it('should return scroll performance analysis', (done) => {
-      this.topmark.loading().then(this.topmark.scrolling().then((result) => {
-        console.log(result);
-        done();
-        // .should.eventually.be.a('object').notify(done)
-      }));
+      this.timeout(1000);
+      topmark.loading().should.eventually.be.a('number').notify(done);
+      done();
     });
   });
 

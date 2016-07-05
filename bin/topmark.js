@@ -12,6 +12,7 @@ program
   .option('-c, --chrome-path [path]', 'The path to google-chrome.')
   .option('-p, --port [port]', 'The debugging port for google-chrome')
   .option('-u, --url [url]', 'The url to test')
+  .option('-o --output [json, filename]', 'stdout json, or specicify filename')
   .parse(process.argv);
 
 console.log('Starting Topmark');
@@ -24,8 +25,10 @@ topm.loading().then(function(loadTime) {
     console.log(`Total Large Frame Count ${frames.getTotalLargeFrameCount()}`);
     console.log('Frame time breakdown');
     console.log(frames.getBreakDownPercentage());
-    topm.close().then(function() {
-      console.log('Topmark Complete');
+    topm.closeTab().then(function() {
+      topm.closeConnection().then(function(){
+        console.log('Topmark Complete');
+      });
     });
   });
 }).catch(function(error) {
