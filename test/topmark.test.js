@@ -1,81 +1,75 @@
 import chai from 'chai';
-import Topmark from "../lib/topmark";
-import chaiAsPromised from "chai-as-promised";
+import Topmark from "../src/topmark";
 
 chai.should();
-chai.use(chaiAsPromised);
 
 describe('Topmark', () => {
-  let port = 9222;
-  let url = "http://topcoat.io"
-  describe('constructor', () => {
-    let topmark = new Topmark(port, url);
-    it('should set port', () => {
-      topmark.port.should.equal(port);
+  describe('options in constructor', () => {
+    let goodOptions = {
+      'default': {
+        'option': true
+      },
+      'pluginSlug': {
+        'option': false
+      }
+    };
+    let topmark = new Topmark(goodOptions);
+    it('should accept an options object', () => {
+      topmark.options.default.option.should.be.true;
     });
-    it('should set url', () => {
-      topmark.url.should.equal(url);
+    it('should merge plugin options with default options', () => {
+      topmark.getOptions('pluginSlug').option.should.be.false;
+    });
+    it('should return default options if no pluginSlug options are defined', () => {
+      topmark.getOptions('unsetPluginSlug').option.should.be.true;
     });
   });
-
-  describe('connection', () => {
-    let topmark;
-    it('should fail if Chrome is using the wrong port', (done) => {
-      let badPort = 9226
-      topmark = new Topmark(badPort, url);
-      topmark.chromeOpenConnection().then((resultPort) => {
-        resultPort.should.be.null;
+  describe('registerPlugins', () => {
+    it('should register a single plugin from a string', (done) => {
+      let topmark = new Topmark();
+      topmark.register('./test/fixtures/another-plugin').then(() => {
+        topmark.registrations.anotherPlugin.name.should.equal('anotherPlugin');
         done();
-      }).catch((error) => {
-        error.should.exist;
-        done();
+      }).catch((err) => {
+        console.log(err);
       });
     })
-    it('should connect to Chrome with the correct port', function(done) {
-      this.timeout(20000);
-      topmark = new Topmark(port, url);
-      topmark.chromeOpenConnection().then((resultPort) => {
-        resultPort.should.equal(port);
-        topmark.closeTab().then(topmark.closeConnection().then(done()));
-      }).catch((error) => {
-        console.error(error);
-        error.should.be.null;
-        done();
+    describe('multiple plugins', () => {
+      let options = {
+        'default': {
+          'thing': 1,
+          'default': true
+        },
+        'anotherPlugin': {
+          'thing': 2,
+          'default': false
+        },
+        'simplePlugin': {
+          'thing': 3
+        }
+      }
+      let topmark = new Topmark(options);
+      it('should register multiple plugins from an array of strings', function (done) {
+        topmark.register([
+          './test/fixtures/simple-plugin',
+          './test/fixtures/another-plugin'
+        ]).then((result) => {
+          topmark.registrations.anotherPlugin.options.thing.should.equal(options.anotherPlugin.thing);
+          topmark.registrations.simplePlugin.options.thing.should.equal(options.simplePlugin.thing);
+          topmark.registrations.simplePlugin.name.should.equal('simplePlugin');
+          topmark.registrations.anotherPlugin.name.should.equal('anotherPlugin');
+          done();
+        }).catch((err) => {
+          console.log(err);
+        });
       });
-    });
-    it('should open a new tab in chrome', function(done) {
-      this.timeout(20000);
-      topmark = new Topmark(port, url);
-      topmark.openTab().then((result) => {
-        result.id.should.be.a('string');
-        topmark.closeTab().then(topmark.closeConnection().then(done()));
+      it('Load a default plugin from systemjs config map', function(done) {
+        topmark = new Topmark();
+        topmark.register('topmark-loadspeed').then((result) => {
+          topmark.registrations.loadspeed.should.not.be.undefined;
+          done();
+        });
       });
     });
   });
-
-  describe('tests', function() {
-    let topmark;
-    before(()=>{
-      topmark = new Topmark(9222, "http://topcoat.io");
-    });
-    afterEach((done)=>{
-      topmark.closeConnection().then(done());
-    });
-    it('should return scroll performance analysis', function(done) {
-      this.timeout(20000);
-      topmark.scrolling().then((result) => {
-        console.log(`Scrolling done ${result.frames.length}`);
-        done();
-      }).catch((error) => {
-        consoe.log(error);
-        done();
-      });
-    });
-    it('should return page load time (in ms)', (done) => {
-      this.timeout(1000);
-      topmark.loading().should.eventually.be.a('number').notify(done);
-      done();
-    });
-  });
-
 });
