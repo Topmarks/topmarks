@@ -38,8 +38,8 @@
   "dependencies": {
     "chrome-remote-interface": "^0.12.2",
     "commander": "^2.9.0",
-    "topmark-loadspeed": "file:///Users/garthdb/Topcoat/topmark-plugins/topmark-loadspeed",
-    "topmark-scrollspeed": "file:///Users/garthdb/Topcoat/topmark-plugins/topmark-scrollspeed"
+    "topmark-loadspeed": "0.0.3",
+    "topmark-scrollspeed": "0.0.2"
   },
   "devDependencies": {
     "another-plugin": "file:test/fixtures/another-plugin",

@@ -33,7 +33,15 @@ describe('Topmark', () => {
       }).catch((err) => {
         console.log(err);
       });
-    })
+    });
+    it('Load a plugin from npm', function(done) {
+      this.timeout(20000);
+      let topmark = new Topmark();
+      topmark.register('topmark-scrollspeed').then((result) => {
+        topmark.registrations['topmark-scrollspeed'].should.not.be.undefined;
+        done();
+      });
+    });
     describe('multiple plugins', () => {
       let options = {
         'default': {
@@ -61,14 +69,6 @@ describe('Topmark', () => {
           done();
         }).catch((err) => {
           console.log(err);
-        });
-      });
-      it('Load a plugin from npm', function(done) {
-        this.timeout(20000);
-        topmark = new Topmark();
-        topmark.register('topmark-scrollspeed').then((result) => {
-          topmark.registrations.scrollspeed.should.not.be.undefined;
-          done();
         });
       });
     });
