@@ -27,7 +27,7 @@ describe('Topmark', () => {
   describe('registerPlugins', () => {
     it('should register a single plugin from a string', (done) => {
       let topmark = new Topmark();
-      topmark.register('./test/fixtures/another-plugin').then(() => {
+      topmark.register('another-plugin').then(() => {
         topmark.registrations.anotherPlugin.name.should.equal('anotherPlugin');
         done();
       }).catch((err) => {
@@ -51,8 +51,8 @@ describe('Topmark', () => {
       let topmark = new Topmark(options);
       it('should register multiple plugins from an array of strings', function (done) {
         topmark.register([
-          './test/fixtures/simple-plugin',
-          './test/fixtures/another-plugin'
+          'simple-plugin',
+          'another-plugin'
         ]).then((result) => {
           topmark.registrations.anotherPlugin.options.thing.should.equal(options.anotherPlugin.thing);
           topmark.registrations.simplePlugin.options.thing.should.equal(options.simplePlugin.thing);
@@ -63,10 +63,11 @@ describe('Topmark', () => {
           console.log(err);
         });
       });
-      it('Load a default plugin from systemjs config map', function(done) {
+      it('Load a plugin from npm', function(done) {
+        this.timeout(20000);
         topmark = new Topmark();
-        topmark.register('topmark-loadspeed').then((result) => {
-          topmark.registrations.loadspeed.should.not.be.undefined;
+        topmark.register('topmark-scrollspeed').then((result) => {
+          topmark.registrations.scrollspeed.should.not.be.undefined;
           done();
         });
       });

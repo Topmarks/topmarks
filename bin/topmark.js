@@ -21,7 +21,6 @@ var options = {
   }
 };
 var topm = new Topmark(options);
-// console.log(topm);
-topm.register('topmark-loadspeed').then((result) => {
+topm.register('./plugins/scrollspeed').then((result) => {
   // console.log(result);
 });
