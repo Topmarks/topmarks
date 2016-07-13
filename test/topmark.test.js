@@ -37,8 +37,10 @@ describe('Topmark', () => {
     it('Load a plugin from npm', function(done) {
       this.timeout(20000);
       let topmark = new Topmark();
-      topmark.register('topmark-scrollspeed').then((result) => {
-        topmark.registrations['topmark-scrollspeed'].should.not.be.undefined;
+      let packageName = 'topmark-loadspeed';
+      let pluginSlug = require(packageName).attributes.name;
+      topmark.register(packageName).then((result) => {
+        topmark.registrations[pluginSlug].should.not.be.undefined;
         done();
       });
     });
@@ -71,6 +73,20 @@ describe('Topmark', () => {
           console.log(err);
         });
       });
+    });
+  });
+  describe('reporting', () => {
+    it('should help plugins add reporting data', (done) => {
+      let options = {
+        "simplePlugin": {
+          "url": "http://google.com"
+        }
+      }
+      let topmark = new Topmark(options);
+      topmark.register('simple-plugin').then((result) => {
+        console.log(topmark.results);
+        done();
+      }).catch(err => console.log(err));
     });
   });
 });

@@ -29,6 +29,12 @@
     "cli",
     "remote debugger protocol"
   ],
+  "nyc": {
+    "exclude": [
+      "lib",
+      "test"
+    ]
+  },
   "author": "Garth Braithwaite <garthdb@gmail.com> (http://garthdb.com)",
   "license": "Apache-2.0",
   "bugs": {
@@ -38,8 +44,10 @@
   "dependencies": {
     "chrome-remote-interface": "^0.12.2",
     "commander": "^2.9.0",
-    "topmark-loadspeed": "0.0.3",
-    "topmark-scrollspeed": "0.0.2"
+    "remi": "^2.0.1",
+    "remi-runner": "^1.1.3",
+    "topmark-loadspeed": "file:///Users/garthdb/Topmarks/topmark-loadspeed",
+    "topmark-scrollspeed": "file:///Users/garthdb/Topmarks/topmark-scrollspeed"
   },
   "devDependencies": {
     "another-plugin": "file:test/fixtures/another-plugin",

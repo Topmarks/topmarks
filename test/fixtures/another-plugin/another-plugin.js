@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function (app, options, next) {
-  next();
+module.exports = function (app, options) {
+  return Promise.resolve();
 };
 
 module.exports.attributes = {
