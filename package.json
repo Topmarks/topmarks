@@ -1,47 +1,69 @@
 {
-  "name": "toplemetry",
+  "name": "topmarks",
   "version": "0.1.0",
-  "description": "CSS Benchmarking command line tool using Chromium's Telemetry",
-  "main": "./lib/toplemetry",
+  "description": "CSS Benchmarking command line tool using Chrome's remote debugging protocol",
+  "main": "./lib/topmark",
   "bin": {
-    "topl": "./bin/toplemetry.js"
+    "topm": "./bin/topmark.js"
   },
   "scripts": {
-    "compile": "babel --presets es2015 -d lib/ src/",
-    "compile-watch": "babel --watch --presets es2015 -d lib/ src/",
+    "compile": "babel --presets es2015 --plugins add-module-exports -d lib/ src/",
+    "compile-watch": "babel --watch --presets es2015 --plugins add-module-exports -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "npm run compile",
     "test": "mocha --compilers js:babel-core/register test",
-    "test-watch": "npm run compile-watch & mocha --compilers js:babel-core/register --watch --reporter mocha-osx-reporter test/",
-    "help": "topl --help"
+    "test-watch": "npm run compile-watch & multi='mocha-osx-reporter=- nyan=-' mocha --compilers js:babel-core/register --watch --reporter mocha-multi test/",
+    "coverage": "nyc --require babel-core/register npm test && nyc report --reporter=text-lcov | coveralls",
+    "help": "topl --help",
+    "chrome": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size=\"800,600\" --enable-gpu-benchmarking"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/topcoat/Telemetry.git"
+    "url": "git+https://github.com/topcoat/topmarks.git"
   },
   "keywords": [
     "css",
     "performance",
     "telemetry",
     "testing",
-    "cli"
+    "cli",
+    "remote debugger protocol"
   ],
+  "nyc": {
+    "exclude": [
+      "lib",
+      "test"
+    ]
+  },
   "author": "Garth Braithwaite <garthdb@gmail.com> (http://garthdb.com)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/topcoat/Telemetry/issues"
+    "url": "https://github.com/topcoat/topmarks/issues"
   },
-  "homepage": "https://github.com/topcoat/Telemetry#readme",
+  "homepage": "https://github.com/topcoat/topmarks#readme",
   "dependencies": {
-    "commander": "^2.9.0"
+    "chrome-remote-interface": "^0.12.2",
+    "commander": "^2.9.0",
+    "remi": "^2.0.1",
+    "remi-runner": "^1.1.3",
+    "topmark-loadspeed": "file:///Users/garthdb/Topmarks/topmark-loadspeed",
+    "topmark-scrollspeed": "file:///Users/garthdb/Topmarks/topmark-scrollspeed"
   },
   "devDependencies": {
+    "another-plugin": "file:test/fixtures/another-plugin",
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "devtools-timeline-model": "^1.1.6",
     "mocha": "^2.5.3",
+    "mocha-multi": "^0.9.0",
     "mocha-osx-reporter": "^0.1.2",
-    "nixt": "^0.5.0"
+    "nixt": "^0.5.0",
+    "nyc": "^6.6.1",
+    "remi": "2.0.1",
+    "simple-plugin": "file:test/fixtures/simple-plugin"
   }
 }

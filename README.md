@@ -1,2 +1,3 @@
-# Telemetry
-CSS Benchmarking command line tool using Chromium's Telemetry
+# Topmarks
+
+CSS Benchmarking command line tool using Chrome's remote debugging protocol.
