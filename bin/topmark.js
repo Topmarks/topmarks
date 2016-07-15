@@ -13,6 +13,9 @@ function list(val) {
   return valArray;
 }
 
+var cmdValue;
+var envValue;
+
 program
   .version(require('../package.json').version)
   .description(require('../package.json').description)
@@ -48,7 +51,7 @@ topm.register(program.plugins).then(function(results) {
     fs.writeFileSync(path.resolve(program.output),JSON.stringify(output));
     console.log("results written to " + program.output)
   } else {
-    console.log(output);
+    console.log(JSON.stringify(output));
   }
 }).catch(function(err){
   console.error(err);

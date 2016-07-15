@@ -1,1 +1,1 @@
-[{"plugin":"loadspeed","url":"http://topcoat.io","timestamp":1468454777139,"report":0.24987199995666742}]
+[{"id":"anotherPluginId","plugin":"anotherPlugin","url":"http://example.com","timestamp":1468625776210,"report":"This is a report"},{"id":"anotherPluginId","plugin":"anotherPlugin","url":"http://example.com","timestamp":1468625777080,"report":"This is a report"}]

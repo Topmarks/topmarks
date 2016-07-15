@@ -4,7 +4,7 @@ import Topmark from "../src/topmark";
 chai.should();
 
 describe('Topmark', () => {
-  describe('options in constructor', () => {
+  describe('constructor', () => {
     let goodOptions = {
       'default': {
         'option': true
@@ -35,14 +35,14 @@ describe('Topmark', () => {
       });
     });
     it('Load a plugin from npm', function(done) {
-      this.timeout(20000);
+      this.timeout(50000);
       let topmark = new Topmark();
       let packageName = 'topmark-loadspeed';
       let pluginSlug = require(packageName).attributes.name;
       topmark.register(packageName).then((result) => {
         topmark.registrations[pluginSlug].should.not.be.undefined;
         done();
-      });
+      }).catch((err) => {console.log(err)});
     });
     describe('multiple plugins', () => {
       let options = {
@@ -58,8 +58,8 @@ describe('Topmark', () => {
           'thing': 3
         }
       }
-      let topmark = new Topmark(options);
       it('should register multiple plugins from an array of strings', function (done) {
+        let topmark = new Topmark(options);
         topmark.register([
           'simple-plugin',
           'another-plugin'
@@ -84,7 +84,8 @@ describe('Topmark', () => {
       }
       let topmark = new Topmark(options);
       topmark.register('simple-plugin').then((result) => {
-        console.log(topmark.results);
+        topmark.results[0].plugin.should.equal('simplePlugin');
+        topmark.results[0].url.should.equal("http://google.com");
         done();
       }).catch(err => console.log(err));
     });
