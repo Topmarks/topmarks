@@ -51,12 +51,6 @@ export default class Topmark {
     });
   }
   register(params) {
-    return new Promise((resolve, reject) => {
-      this.loadPlugins(params).then((plugins) => {
-        this._registrator.register(plugins).then((results) => {
-          resolve(this.results);
-        }).catch(err => reject(err));
-      }).catch(err => reject(err));
-    });
+    return this.loadPlugins(params).then((plugins) => this._registrator.register(plugins));
   }
 }

@@ -63,7 +63,6 @@
     "mocha-osx-reporter": "^0.1.2",
     "nixt": "^0.5.0",
     "nyc": "^6.6.1",
-    "plugiator": "^0.2.1",
     "remi": "2.0.1",
     "simple-plugin": "file:test/fixtures/simple-plugin"
   }

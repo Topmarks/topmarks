@@ -1,7 +1,6 @@
 import nixt from 'nixt';
 import fs from 'fs';
 import path from 'path';
-import * as plugiator from 'plugiator';
 
 function existsSync(filePath){
   try{
