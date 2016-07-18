@@ -46,7 +46,7 @@ topm.register(program.plugins).then(function(results) {
       if(Array.isArray(readData)) output = output.concat(readData);
     } catch(e) {}
   }
-  output = output.concat(results);
+  output = output.concat(topm.results);
   if(program.output) {
     fs.writeFileSync(path.resolve(program.output),JSON.stringify(output));
     console.log("results written to " + program.output)
