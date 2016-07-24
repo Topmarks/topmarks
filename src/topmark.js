@@ -1,4 +1,3 @@
-import Chrome from 'chrome-remote-interface';
 import remi from 'remi';
 import remiRunner from 'remi-runner';
 
@@ -6,22 +5,11 @@ export default class Topmark {
   constructor(options = {}) {
     this._registrator = remi(this);
     this._registrator.hook(remiRunner());
-    this.Chrome = Chrome;
     this.options = options;
     this.results = [];
     if(options.hasOwnProperty('default') && options.default.hasOwnProperty('id')){
       this.pageId = options.default.id;
     }
-  }
-  startupChrome(port, url = "about:blank"){
-    return [this.Chrome.New({port: port, url: url}), this.Chrome({port: port})].reduce((pacc, fn) => {
-      console.log(pacc);
-      console.log(fn);
-      pacc.then(fn);
-    }, Promise.resolve());
-  }
-  shutdownChrome(){
-
   }
   addResults(url, pluginSlug, report, pageId = false, timestamp = false) {
     let results = {};
