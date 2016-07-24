@@ -45,8 +45,8 @@
     "commander": "^2.9.0",
     "remi": "^2.0.1",
     "remi-runner": "^1.1.3",
-    "topmark-loadspeed": "^0.1.3",
-    "topmark-scrollspeed": "^0.1.5"
+    "topmark-loadspeed": "^0.2.0",
+    "topmark-scrollspeed": "^0.2.1"
   },
   "devDependencies": {
     "another-plugin": "file:test/fixtures/another-plugin",
