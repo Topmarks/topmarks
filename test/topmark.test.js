@@ -30,9 +30,7 @@ describe('Topmark', () => {
       topmark.register('another-plugin').then(() => {
         topmark.registrations.anotherPlugin.name.should.equal('anotherPlugin');
         done();
-      }).catch((err) => {
-        console.log(err);
-      });
+      }).catch(() => done());
     });
     it('Load a plugin from npm', function(done) {
       this.timeout(50000);
@@ -42,7 +40,7 @@ describe('Topmark', () => {
       topmark.register(packageName).then((result) => {
         topmark.registrations[pluginSlug].should.not.be.undefined;
         done();
-      }).catch((err) => {console.log(err)});
+      }).catch(() => done());
     });
     describe('multiple plugins', () => {
       let options = {
@@ -69,9 +67,7 @@ describe('Topmark', () => {
           topmark.registrations.simplePlugin.name.should.equal('simplePlugin');
           topmark.registrations.anotherPlugin.name.should.equal('anotherPlugin');
           done();
-        }).catch((err) => {
-          console.log(err);
-        });
+        }).catch(() => done());
       });
     });
   });
@@ -87,7 +83,7 @@ describe('Topmark', () => {
         topmark.results[0].plugin.should.equal('simplePlugin');
         topmark.results[0].url.should.equal("http://google.com");
         done();
-      }).catch(err => console.log(err));
+      }).catch(() => done());
     });
   });
 });

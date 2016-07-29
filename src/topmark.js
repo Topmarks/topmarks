@@ -1,25 +1,13 @@
 import remi from 'remi';
 import remiRunner from 'remi-runner';
+import remiAddResults from 'remi-topmarks-results';
 
 export default class Topmark {
   constructor(options = {}) {
     this._registrator = remi(this);
     this._registrator.hook(remiRunner());
+    this._registrator.hook(remiAddResults());
     this.options = options;
-    this.results = [];
-    if(options.hasOwnProperty('default') && options.default.hasOwnProperty('id')){
-      this.pageId = options.default.id;
-    }
-  }
-  addResults(url, pluginSlug, report, pageId = false, timestamp = false) {
-    let results = {};
-    if(!pageId && this.hasOwnProperty('pageId')) pageId = this.pageId;
-    if(pageId) results.id = pageId;
-    results.plugin = pluginSlug;
-    results.url = url;
-    results.timestamp = (timestamp)? timestamp: Date.now();
-    results.report = report;
-    this.results.push(results);
   }
   getOptions(pluginSlug) {
     let result = {port: 9222, url: "http://topcoat.io"};

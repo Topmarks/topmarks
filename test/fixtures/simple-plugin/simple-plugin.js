@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (app, options) {
-  app.root.addResults(options.url,module.exports.attributes.name,{report:"foo"});
+  app.addResults({report:"foo"});
   return Promise.resolve();
 };
 
