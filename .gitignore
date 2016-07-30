@@ -1,9 +1,11 @@
 # Logs
 logs
+docs.json
 *.log
 npm-debug.log*
 .DS_Store
-lib
+/lib
+/bin
 
 # Runtime data
 pids
