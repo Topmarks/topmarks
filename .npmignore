@@ -1,6 +1,6 @@
 src/
 test/
 .*
-.nyc_output
 coverage
 inch.json
+docs.json

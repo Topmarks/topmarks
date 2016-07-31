@@ -22,7 +22,7 @@ describe('Topmark CLI', () => {
   it('displays current version', done => {
     nixt()
     .run('topm -V')
-    .stdout(require('../package.json').version)
+    .stdout(require('../package.json').version) // eslint-disable-line global-require
     .end(done);
   });
   it('should output report file', function (done) {

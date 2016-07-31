@@ -7,6 +7,8 @@ import Topmark from '../lib/topmark';
 import existsSync from '../lib/exists-sync';
 import pkginfo from 'pkginfo';
 
+pkginfo(module, 'version', 'description');
+
 /**
  *  Private: formats plugin list options
  *
@@ -22,7 +24,7 @@ import pkginfo from 'pkginfo';
  *
  *    [somePlugin,anotherPlugin]
  *
- *  Returns {Array} or pluginSlugs
+ *  Returns an {Array} of pluginSlugs
  */
 function list(val) {
   const valArray = val.replace(/\[|\]|'|'/g, '').split(',');
@@ -34,8 +36,8 @@ function list(val) {
 }
 
 program
-  .version(pkginfo.version)
-  .description(pkginfo.description)
+  .version(module.exports.version)
+  .description(module.exports.description)
   .option('-p, --port [port]', 'The debugging port for google-chrome (default: 9222).', 9222)
   .option('-u, --url [url]', 'The url to test (default: http://topcoat.io).', 'http://topcoat.io')
   .option('-o, --output [filename]', 'Writes results to json file.')

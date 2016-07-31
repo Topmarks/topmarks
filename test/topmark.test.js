@@ -37,6 +37,7 @@ describe('Topmark', () => {
       this.timeout(50000);
       const topmark = new Topmark();
       const packageName = 'topmark-loadspeed';
+      // eslint-disable-next-line global-require
       const pluginSlug = require(packageName).attributes.name;
       topmark.register(packageName).then(() => {
         topmark.registrations[pluginSlug].should.not.equal(undefined);

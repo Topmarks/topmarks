@@ -85,10 +85,12 @@ export default class Topmark {
   loadPlugins(thing) {
     return new Promise((resolve, reject) => {
       if (typeof thing === 'string') {
+        // eslint-disable-next-line global-require
         const plugin = require(thing);
         resolve([{ register: plugin, options: this.getOptions(plugin.attributes.name) }]);
       } else if (typeof thing === 'object' && Array.isArray(thing)) {
         const plugins = thing.map((pluginSlug) => {
+          // eslint-disable-next-line global-require
           const plugin = require(pluginSlug);
           return ({ register: plugin, options: this.getOptions(plugin.attributes.name) });
         });
