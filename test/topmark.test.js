@@ -33,6 +33,15 @@ describe('Topmark', () => {
         done();
       }).catch(() => done());
     });
+    it('should reject anything other than a plugin string or array of plugin strings', (done) => {
+      const topmark = new Topmark();
+      topmark.register({ plugin: 'this is not a plugin' }).then(() => {
+        done();
+      }).catch((err) => {
+        err.should.equal('Must be a plugin string, or an array of plugin strings');
+        done();
+      });
+    });
     it('Load a plugin from npm', function (done) {
       this.timeout(50000);
       const topmark = new Topmark();
