@@ -1,11 +1,10 @@
-'use strict';
-
-module.exports = function (app, options) {
-  app.root.addResults("http://example.com",module.exports.attributes.name,"This is a report",'anotherPluginId');
+/* eslint-disable func-names */
+module.exports = function (app) {
+  app.addResults('This is a report');
   return Promise.resolve();
 };
 
 module.exports.attributes = {
   name: 'anotherPlugin',
-  version: '1.0.0'
+  version: '1.0.0',
 };

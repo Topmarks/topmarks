@@ -17,4 +17,4 @@ before_script:
 after_success:
   - sudo kill -KILL $(sudo lsof -t -i:9222)
   - sudo xvfb-run -e /dev/stdout -a --server-args='-screen 0, 1024x768x16' google-chrome --remote-debugging-port=9222 --user-data-dir=$TMPDIR/chrome-profiling --no-default-browser-check --bwsi --window-size='800,600' > /dev/null &
-  - npm run coveralls
+  - npm run codeclimate
