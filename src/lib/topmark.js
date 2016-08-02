@@ -118,6 +118,6 @@ export default class Topmark {
    *  Returns a {Promise}
    */
   register(params) {
-    return this.loadPlugins(params).then((plugins) => this.registrator.register(plugins));
+    return this.loadPlugins(params).then(this.registrator.register);
   }
 }
