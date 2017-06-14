@@ -1,8 +1,7 @@
 src/
 test/
-.*
-coverage
-inch.json
-docs.json
-node_modules/
-npm-debug.log
+.nyc_output
+.babelrc
+.eslintrc
+.gitignore
+.travis.yml
