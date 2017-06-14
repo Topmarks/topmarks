@@ -1,6 +1,6 @@
 {
   "name": "topmarks",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CSS Benchmarking command line tool using Chrome's remote debugging protocol",
   "main": "./lib/topmark",
   "bin": {
