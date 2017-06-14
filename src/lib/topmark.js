@@ -11,18 +11,20 @@ export default class Topmark {
    *
    *  * `options` (optional) an {Object} of options for `pluginSlug` or `default`
    *
-   *  ## Example
+   *  ## Examples
    *
-   *    const options = {
-   *      default: {
-   *        url: "http://topcoat.io",
-   *        port: 9222
-   *      },
-   *      somePlugin: {
-   *        url: "http://google.com"
-   *      }
-   *    };
-   *    // url will be overwritten for somePlugin
+   *  ```js
+   *  const options = {
+   *    default: {
+   *      url: "http://topcoat.io",
+   *      port: 9222
+   *    },
+   *    somePlugin: {
+   *      url: "http://google.com"
+   *    }
+   *  };
+   *  // url will be overwritten for somePlugin
+   *  ```
    */
   constructor(options = {}) {
     this.registrator = remi(this);
@@ -105,15 +107,17 @@ export default class Topmark {
    *
    *  * `params` {string|Array} a string to require plugin or array of plugin strings.
    *
-   *  ## Example
+   *  ## Examples
    *
-   *    const topmark = new Topmark();
-   *    topmark.register([
-   *      'simple-plugin',
-   *      'another-plugin',
-   *    ]).then(() => {
-   *      //Do something after loading plugins
-   *    }).catch(console.log);
+   *  ```js
+   *  const topmark = new Topmark();
+   *  topmark.register([
+   *    'simple-plugin',
+   *    'another-plugin',
+   *  ]).then(() => {
+   *    //Do something after loading plugins
+   *  }).catch(console.log);
+   *  ```
    *
    *  Returns a {Promise}
    */
