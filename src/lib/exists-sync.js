@@ -5,10 +5,12 @@ import fs from 'fs';
  *
  *  * `filePath` a {String} representing the path to the file to check
  *
- *  ## Example
+ *  ## Examples
  *
- *    console.log(existsSync('somefile.txt'));
- *    // outputs true if file exists
+ *  ```js
+ *  console.log(existsSync('somefile.txt'));
+ *  // outputs true if file exists
+ *  ```
  *
  *  Returns {Bool}
  */
