@@ -4,3 +4,5 @@ test/
 coverage
 inch.json
 docs.json
+node_modules/
+npm-debug.log
